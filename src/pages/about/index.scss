@@ -1,0 +1,51 @@
+.about-page {
+  .userinfo {
+    display: flex;
+    align-items: center;
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    .userinfo-avatar-wrapper {
+      width: 100%;
+      height: 150px;
+      display: flex;
+      padding: 10px;
+      box-sizing: border-box;
+      // align-items: center;
+      // justify-content: center;
+      backdrop-filter: blur(20px);
+      transition: 0.5s ease;
+      // &:hover {
+      //   box-shadow: 0 0.7px 1px rgba(0, 0, 0, 0.157),
+      //   0 1.7px 2.6px rgba(0, 0, 0, 0.224), 0 3.5px 5.3px rgba(0, 0, 0, 0.28),
+      //   0 7.3px 11px rgba(0, 0, 0, 0.346), 0 20px 30px rgba(0, 0, 0, 0.5);
+      // }
+      .userinfo-avatar {
+        width: 100px;
+        height: 100px;
+        margin: 0;
+        padding: 0;
+        border-radius: 50%;
+        background-size: cover;
+        background-color: #f2f2f2;
+        box-shadow: 0 0.3px 0.7px rgba(0, 0, 0, 0.126),
+        0 0.9px 1.7px rgba(0, 0, 0, 0.179), 0 1.8px 3.5px rgba(0, 0, 0, 0.224),
+        0 3.7px 7.3px rgba(0, 0, 0, 0.277), 0 10px 20px rgba(0, 0, 0, 0.4);
+        &:after {
+          border: none;
+        }
+      }
+      .info-list {
+        color: white;
+        padding-left: 30px;
+      }
+    }
+    .userinfo-nickname {
+      font-size: 32rpx;
+      color: #007aff;
+      background-color: white;
+      background-size: cover;
+    }
+  }
+}
+
