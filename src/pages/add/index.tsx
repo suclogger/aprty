@@ -6,37 +6,36 @@ import { toast, loading, hiddenLoading } from './../../utils/modal'
 import './index.scss'
 
 export default () => {
-  const [text, setText] = useState('123')
-  const [desc, setDesc] = useState('123')
+  const [text, setName] = useState('')
+  const [desc, setDesc] = useState('')
+  const [unit, setUnit] = useState('300')
+
 
   const goBack = () => {
     Taro.navigateBack({delta: 1})
   }
 
-  // const onTimeChange = () => {
-
-  // }
-
-  // const onDateChange = () => {
-
-  // }
-
   const addToDo = () => {
-    if (!text.trim() || !desc.trim() ) {
+    if (!text.trim() ) {
       toast('信息填写不完整', 'none', 1000)
     } else {
       loading('添加中...')
       const userInfo = Taro.getStorageSync('userInfo') || '{}'
-      const _openid = JSON.parse(userInfo).openid
+      console.log(userInfo);
+      const userInfoObject = JSON.parse(userInfo);
+      const _openid = userInfoObject.openid
       if (_openid) {
         const addItem = {
           'openid': _openid,
-          'text': text,
-          'desc': desc,
+          'name': text,
+          'pwd': desc,
+          'unit': unit,
+          'sponsor': userInfoObject.nickName,
+          'sponsorAvatarUrl': userInfoObject.avatarUrl,
           'completed': false,
-          'overDate': new Date()}
+          'date': new Date()}
         const db = wx.cloud.database()
-        db.collection('todos').add({
+        db.collection('party').add({
           data: {
             ...addItem
           },
@@ -44,7 +43,7 @@ export default () => {
             toast('添加成功', 'none', 1000)
             hiddenLoading()
             Taro.switchTab({
-              url: '/pages/home/index'
+              url: '/pages/list/index'
             })
           },
           fail: (e) => {
@@ -71,45 +70,33 @@ export default () => {
       />
       <View className="body">
         <AtForm>
-          <Panel title="TODO ITEM" />
+          {/* <Panel title="TODO ITEM" /> */}
           <AtInput
-            name='value1'
-            title=''
+            required
+            name='name'
+            title='活动主题'
             type='text'
-            placeholder='what you want todo?'
+            placeholder='师出有名'
             value={text}
-            onChange={(e) => {setText(e)}}
+            onChange={(e) => {setName(e)}}
           />
-          <Panel title="TODO ITEM DESCRIPTION" />
-          <AtTextarea
+          <AtInput
+            name='unit'
+            title='一手'
+            type='digit'
+            value={unit}
+            onChange={(e) => {setUnit(e)}}
+          /> 
+          {/* <AtInput
+            required
+            name='pwd'
+            title='口令'
+            placeholder='输入若干位的数字口令'
+            type='digit'
             value={desc}
-            onChange={(e) => {
-              setDesc(e)}
-            }
-            maxLength={200}
-          />
-          {/* <View className='page-section'>
-            <Text>时间选择器</Text>
-            <View>
-              <Picker mode='time' value='123' onChange={onTimeChange}>
-                <View className='picker'>
-                  当前选择：{123}
-                </View>
-              </Picker>
-            </View>
-          </View>
-          <View className='page-section'>
-            <Text>日期选择器</Text>
-            <View>
-              <Picker mode='date' value={'123'} onChange={onDateChange}>
-                <View className='picker'>
-                  当前选择：{123}
-                </View>
-              </Picker>
-            </View>
-          </View>
-           */}
-          <AtButton onClick={addToDo}>添加</AtButton>
+            onChange={(e) => {setDesc(e)}}
+          /> */}
+          <AtButton type='primary' onClick={addToDo}>添加</AtButton>
         </AtForm>
       </View>
     </View>

@@ -7,7 +7,7 @@ import { toast, loading, hiddenLoading } from './../../utils/modal'
 import { isEmptyObject, loginAndGetOpenid } from './../../utils/common'
 import './index.scss'
 const defaultIcon = require('./../../assets/images/suclogger-talk.png')
-const cashIcon = require('./../../assets/images/cash-outline.png')
+const cashIcon = require('./../../assets/images/color-wand-outline.png')
 const personIcon = require('./../../assets/images/person-circle-outline.png')
 const rankIcon = require('./../../assets/images/ribbon-outline.png')
 
@@ -68,18 +68,11 @@ export default class About extends Component<IProps> {
     }
   }
 
-  enterAddPage = () => {
-    Taro.navigateTo({
-      url: '/pages/add/index'
-    })
-  }
-
   onClick(item: object, index: number) {
-    console.log(index);
     switch (index) {
       case 0:
-        wx.switchTab({
-          url: '/pages/list/index'
+        Taro.navigateTo({
+          url: '/pages/add/index'
         });
         break;
       case 1:
@@ -121,7 +114,7 @@ export default class About extends Component<IProps> {
             data={[
               {
                 image: cashIcon,
-                value: "插秧活动"
+                value: "发起插秧"
               },
               {
                 image: personIcon,

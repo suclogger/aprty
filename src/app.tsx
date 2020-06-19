@@ -66,7 +66,8 @@ class App extends Component {
       'pages/list/index',
       'pages/about/index',
       'pages/add/index',
-      'pages/home/index'
+      'pages/home/index',
+      'pages/party/index'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -86,14 +87,14 @@ class App extends Component {
         selectedIconPath: './assets/images/scan-circle.png'
       },{
         pagePath: 'pages/home/index',
-        text: 'home',
-        iconPath: './assets/images/cash-outline.png',
-        selectedIconPath: './assets/images/cash.png'
+        text: '日历',
+        iconPath: './assets/images/calendar-outline.png',
+        selectedIconPath: './assets/images/calendar.png'
       },{
         "pagePath": "pages/list/index",
-        "text": "列表",
-        iconPath: './assets/images/scan-circle-outline.png',
-        selectedIconPath: './assets/images/scan-circle.png'
+        "text": "插秧",
+        iconPath: './assets/images/cash-outline.png',
+        selectedIconPath: './assets/images/cash.png'
       },{
         "pagePath": "pages/about/index",
         "text": "我",

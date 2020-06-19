@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect } from '@tarojs/taro'
+import Taro, { Component, useState, useEffect } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtList, AtListItem, AtLoadMore } from 'taro-ui'
 import { IPartyList }  from './../../utils/interface'
@@ -31,6 +31,12 @@ function List(props): JSX.Element {
     })
   }
 
+  const joinParty  = (partyId) => {
+    return Taro.navigateTo({
+      url: '/pages/party/index?id=' + partyId
+    })
+  }
+
   useEffect(() => {
     fetchPartyList()
   }, [curPage])
@@ -38,7 +44,7 @@ function List(props): JSX.Element {
   const loadMore = () => {
     hasMore && setCurPage(curPage + 1)
   }
-  
+
   return (
     <View className="list-apge">
       <View className="list-body">
@@ -50,9 +56,10 @@ function List(props): JSX.Element {
                 key={item._id}
                 title={item.name}
                 arrow='right'
-                note={item.date}
+                note={item.date.toLocaleString()}
                 thumb={item.sponsorAvatarUrl}
                 disabled={item.completed}
+                onClick = {() => {joinParty(item._id)}}
                 />
               )
             })

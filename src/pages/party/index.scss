@@ -1,0 +1,17 @@
+.list-apge {
+  // height: 100vh;
+  // position: relative;
+  overflow: hidden;
+  .list-body {
+    // padding-bottom: 200px;
+    overflow: auto;
+  }
+  .list-fotter {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+  }
+  .test {
+    color: red
+  }
+}
