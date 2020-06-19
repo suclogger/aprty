@@ -1,11 +1,16 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Button } from '@tarojs/components'
 import { inject, observer } from '@tarojs/mobx'
-import { AtDivider, AtButton } from 'taro-ui'
+import { AtNoticebar, AtGrid } from 'taro-ui'
+
 import { toast, loading, hiddenLoading } from './../../utils/modal'
 import { isEmptyObject, loginAndGetOpenid } from './../../utils/common'
-import YearProgress from './../../components/yearProgress'
 import './index.scss'
+const defaultIcon = require('./../../assets/images/suclogger-talk.png')
+const cashIcon = require('./../../assets/images/cash-outline.png')
+const personIcon = require('./../../assets/images/person-circle-outline.png')
+const rankIcon = require('./../../assets/images/ribbon-outline.png')
+
 
 interface IProps {
   appStore: {
@@ -33,38 +38,6 @@ export default class About extends Component<IProps> {
   }
 
   public login = (userInfo) => {
-    {/*wx.cloud.callFunction({
-      name: 'login',
-      data: {},
-      success: res => {
-        const { openid } = res
-        const db = wx.cloud.database()
-        db.collection("users").where({
-          openid
-        }).get({
-          success: res => {
-            const { data } = res
-            // if (data.length === 0) {
-              db.collection("users").add({
-                data: {
-                  openid,
-                  ...userInfo
-                },
-                success: () => {
-                  toast('登录成功', 'success', 1000)
-                  const val = JSON.stringify({openid, ...userInfo})
-                  Taro.setStorage({ key: 'userInfo', data: val })
-                }
-              })
-            // }
-            hiddenLoading()
-          },
-          fail: () => {
-            toast('出了点状况', 'none', 1000)
-          }
-        })
-      }
-    })*/}
     loading('登录中...')
     loginAndGetOpenid(userInfo).then(res => {
       hiddenLoading()
@@ -101,11 +74,28 @@ export default class About extends Component<IProps> {
     })
   }
 
+  onClick(item: object, index: number) {
+    console.log(index);
+    switch (index) {
+      case 0:
+        wx.switchTab({
+          url: '/pages/list/index'
+        });
+        break;
+      case 1:
+        toast('建设中', 'none', 1000)
+        break;
+      case 2:
+        toast('建设中', 'none', 1000)
+        break;
+      default:
+    }
+  }
 
   render() {
     const { userInfo } = this.props.appStore
     const { logged } = this.props.appStore
-    const avatar = userInfo.avatarUrl ? userInfo.avatarUrl : 'https://i.loli.net/2019/11/17/GAYyzeKsiWjP5qO.jpg'
+    const avatar = userInfo.avatarUrl ? userInfo.avatarUrl : defaultIcon
     return (
       <View className='about-page'>
         <View className="userinfo"
@@ -116,17 +106,33 @@ export default class About extends Component<IProps> {
               open-type="getUserInfo"
               onGetUserInfo={this.getUserInfo}
               className="userinfo-avatar"
-              style={{ backgroundImage: "url(" + avatar + ")" }}
-            ></Button>
+              style={{ backgroundImage: "url(" + avatar + ")" }}></Button>
             <View className="info-list">
               <Text>{userInfo.nickName}</Text>
             </View>
           </View>
         </View>
-        <YearProgress />
-        <AtDivider customStyle={logged ? {display: 'none'} : {}} content='你还未登录，点击上方头像登录' fontColor='#ed3f14' lineColor='#ed3f14' />
+        <AtNoticebar icon='volume-plus' customStyle={logged ? {display: 'none'} : {}}>你还未登录，点击上方头像登录</AtNoticebar>
         <View className="about-opration" style={logged ? {} : {display: 'none'}}>
-          <AtButton onClick={this.enterAddPage}>添加事项</AtButton>
+          {/* <AtButton onClick={this.enterAddPage}>添加事项</AtButton> */}
+          <AtGrid
+            onClick={this.onClick.bind(this)}
+            mode="square"
+            data={[
+              {
+                image: cashIcon,
+                value: "插秧活动"
+              },
+              {
+                image: personIcon,
+                value: "我的战绩"
+              },
+              {
+                image: rankIcon,
+                value: "天梯"
+              }
+            ]}
+          />
         </View>
       </View>
     )

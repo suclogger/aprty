@@ -71,7 +71,7 @@ class App extends Component {
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
+      navigationBarTitleText: '素可乐™️工具箱',
       navigationBarTextStyle: 'black'
     },
     tabBar: {
@@ -97,8 +97,8 @@ class App extends Component {
       },{
         "pagePath": "pages/about/index",
         "text": "我",
-        iconPath: './assets/images/scan-circle-outline.png',
-        selectedIconPath: './assets/images/scan-circle.png'
+        iconPath: './assets/images/person-circle-outline.png',
+        selectedIconPath: './assets/images/person-circle.png'
       }]
     }
     // ,
