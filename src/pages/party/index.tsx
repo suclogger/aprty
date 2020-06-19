@@ -53,30 +53,6 @@ export default class Party extends Component {
     })
   }
 
-  // doneToDoItem = (id) => {
-  //   loading('切换中...')
-  //   const { todos } = this.state
-  //   const item = todos.find(item => item._id === id)
-  //   item && db.collection('todos').doc(id).update({
-  //     data: {
-  //       completed: !item.completed
-  //     },
-  //     success: () => {
-  //       const newTodos = this.state.todos.map(item => {
-  //         if (item._id === id) {
-  //           item.completed = !item.completed
-  //         }
-  //         return item
-  //       })
-  //       this.setState({
-  //         todos: newTodos
-  //       })
-  //       hiddenLoading()
-  //       toast('切换成功', 'success', 1000)
-  //     }
-  //   })
-  // }
-
   componentDidMount() {
     const partyId = this.$router.params.id
     const userInfo = Taro.getStorageSync('userInfo') || '{}'
@@ -92,22 +68,6 @@ export default class Party extends Component {
       })
     }
   }
-
-  // componentDidShow () {
-  //   const partyId = this.$router.params.id
-  //   const userInfo = Taro.getStorageSync('userInfo') || '{}'
-  //   const userInfoObject = JSON.parse(userInfo)
-  //   const openid = userInfoObject.openid
-  //   if (openid) {
-  //     this.setState({
-  //       openid: openid,
-  //       partyId: partyId,
-  //       userInfoObject: userInfoObject
-  //     }, () => {
-  //       this.fetchPartyMembers()
-  //     })
-  //   }
-  // }
 
   handleClick(id, nickName) {
     Taro.showModal({

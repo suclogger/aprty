@@ -72,7 +72,8 @@ class App extends Component {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: '素可乐™️工具箱',
-      navigationBarTextStyle: 'black'
+      navigationBarTextStyle: 'black',
+      enablePullDownRefresh: true
     },
     tabBar: {
       color: '#626567',

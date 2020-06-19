@@ -41,7 +41,7 @@ export default class About extends Component<IProps> {
     loading('登录中...')
     loginAndGetOpenid(userInfo).then(res => {
       hiddenLoading()
-      toast('登录成功', 'success', 1000)
+      toast('登录成功', 'none', 1000)
       const val = JSON.stringify(res)
       Taro.setStorageSync('userInfo', val)
     }).catch(() => {

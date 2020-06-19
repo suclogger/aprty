@@ -42,7 +42,7 @@ function List(props): JSX.Element {
   }, [curPage])
 
   const loadMore = () => {
-    hasMore && setCurPage(curPage + 1)
+    curPage === 0 || (hasMore && setCurPage(curPage + 1))
   }
 
   return (
