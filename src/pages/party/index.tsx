@@ -172,6 +172,7 @@ export default class Party extends Component {
                   note={item.amount.toString()}
                   thumb={item.avatarUrl}
                   onClick = {this.handleClick.bind(this, item._id, item.nickName)}
+                  extraText='加一手'
                   />
                 )
               })
