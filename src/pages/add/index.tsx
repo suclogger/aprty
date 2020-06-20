@@ -8,7 +8,7 @@ import './index.scss'
 export default () => {
   const [text, setName] = useState('')
   const [desc, setDesc] = useState('')
-  const [unit, setUnit] = useState('300')
+  // const [unit, setUnit] = useState('300')
 
 
   const goBack = () => {
@@ -29,10 +29,10 @@ export default () => {
           'openid': _openid,
           'name': text,
           'pwd': desc,
-          'unit': unit,
+          // 'unit': unit,
           'sponsor': userInfoObject.nickName,
           'sponsorAvatarUrl': userInfoObject.avatarUrl,
-          'completed': false,
+          'complete': false,
           'date': new Date()}
         const db = wx.cloud.database()
         db.collection('party').add({
@@ -80,13 +80,13 @@ export default () => {
             value={text}
             onChange={(e) => {setName(e)}}
           />
-          <AtInput
+          {/* <AtInput
             name='unit'
             title='一手'
             type='digit'
             value={unit}
             onChange={(e) => {setUnit(e)}}
-          /> 
+          />  */}
           {/* <AtInput
             required
             name='pwd'

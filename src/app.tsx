@@ -72,8 +72,7 @@ class App extends Component {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: '素可乐™️工具箱',
-      navigationBarTextStyle: 'black',
-      enablePullDownRefresh: true
+      navigationBarTextStyle: 'black'
     },
     tabBar: {
       color: '#626567',
@@ -82,7 +81,7 @@ class App extends Component {
       borderStyle: 'white',
       list: [{
         pagePath: 'pages/index/index',
-        text: 'Scan',
+        text: '素可乐™️',
         iconPath: './assets/images/scan-circle-outline.png',
         selectedIconPath: './assets/images/scan-circle.png'
       },{

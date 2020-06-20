@@ -42,11 +42,12 @@ function List(props): JSX.Element {
   }, [curPage])
 
   const loadMore = () => {
-    curPage === 0 || (hasMore && setCurPage(curPage + 1))
+    hasMore && setCurPage(curPage + 1)
   }
 
   return (
     <View className="list-apge">
+      
       <View className="list-body">
         <AtList>
           {
@@ -58,7 +59,7 @@ function List(props): JSX.Element {
                 arrow='right'
                 note={item.date.toLocaleString()}
                 thumb={item.sponsorAvatarUrl}
-                disabled={item.completed}
+                disabled={item.complete}
                 onClick = {() => {joinParty(item._id)}}
                 />
               )

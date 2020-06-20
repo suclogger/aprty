@@ -15,7 +15,7 @@ export interface IPartyList {
   sponsor: string,
   sponsorAvatarUrl: string,
   date: string,
-  completed: boolean,
+  complete: boolean,
   pwd: string,
   _id: string,
   _openid: string
