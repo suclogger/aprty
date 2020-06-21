@@ -1,7 +1,8 @@
-import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Button } from '@tarojs/components'
 import { inject, observer } from '@tarojs/mobx'
 import { AtNoticebar, AtGrid } from 'taro-ui'
+import Taro, { Component } from '@tarojs/taro'
+
 
 import { toast, loading, hiddenLoading } from './../../utils/modal'
 import { isEmptyObject, loginAndGetOpenid } from './../../utils/common'

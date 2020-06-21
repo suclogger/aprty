@@ -1,7 +1,10 @@
+import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtList, AtListItem, AtLoadMore } from 'taro-ui'
 import { loading, hiddenLoading, toast } from './../../utils/modal'
-import Taro, { Component } from '@tarojs/taro'
+
+
+
 
 import './index.scss'
 
