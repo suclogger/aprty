@@ -1,10 +1,10 @@
-import Taro, { Component, useState, useEffect } from '@tarojs/taro'
+import Taro, { Component} from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtList, AtListItem, AtLoadMore } from 'taro-ui'
 import { toast } from './../../utils/modal'
 import './index.scss'
 
-const db = wx.cloud.database()
+const db = Taro.cloud.database()
 
 export default class PartyListView extends Component {
   constructor(){

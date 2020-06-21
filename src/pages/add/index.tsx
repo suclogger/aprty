@@ -1,7 +1,6 @@
 import Taro, { useState } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { AtNavBar, AtForm, AtInput, AtTextarea, AtButton } from 'taro-ui'
-import Panel from './../../components/panel'
+import { AtNavBar, AtForm, AtInput, AtButton } from 'taro-ui'
 import { toast, loading, hiddenLoading } from './../../utils/modal'
 import './index.scss'
 

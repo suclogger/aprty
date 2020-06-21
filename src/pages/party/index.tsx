@@ -4,7 +4,7 @@ import { AtList, AtListItem, AtButton, AtBadge,AtDivider,AtForm,AtInput } from '
 import { toast} from './../../utils/modal'
 import './index.scss'
 
-const db = wx.cloud.database()
+const db = Taro.cloud.database()
 
 export default class Party extends Component {
   constructor() {
@@ -162,7 +162,7 @@ export default class Party extends Component {
   }
 
   onSettleParty (event) {
-    wx.cloud.callFunction({
+    Taro.cloud.callFunction({
       name: 'settleParty',
       data: {
         partyId: this.state.partyId,

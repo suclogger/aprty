@@ -24,15 +24,15 @@ const store = {
 class App extends Component {
 
   componentDidMount () {
-    wx.cloud.init({
+    Taro.cloud.init({
       env: 'product-us5v2',
       traceUser: true
     });
 
-    wx.getSetting({
+    Taro.getSetting({
       success: res => {
         if (res.authSetting['scope.userInfo']) {
-          wx.getUserInfo({
+          Taro.getUserInfo({
             success: res => {
               appStore.setUserInfo(res.userInfo)
               loginAndGetOpenid(res.userInfo).then(ret => {

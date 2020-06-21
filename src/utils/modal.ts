@@ -1,18 +1,18 @@
 export const loading = (text: string) => {
-  wx.showLoading({
+  Taro.showLoading({
     title: text
   })
 }
 
 export const hiddenLoading = () => {
-  wx.hideLoading()
+  Taro.hideLoading()
 }
 
 export const toast = (title: string, icon: string, duration: number) => {
-  wx.showToast({
-    title,
-    icon,
-    duration
+  Taro.showToast({
+    title: title,
+    icon: icon,
+    duration: duration
   })
 }
 
