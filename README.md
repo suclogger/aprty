@@ -14,7 +14,7 @@
 
 ## 运行截图
 
-![1](.readme/1.PNG)
-![2](.readme/2.PNG)
-![3](.readme/3.PNG)
-![4](.readme/4.PNG)
+![1](./readme/1.PNG)
+![2](./readme/2.PNG)
+![3](./readme/3.PNG)
+![4](./readme/4.PNG)
