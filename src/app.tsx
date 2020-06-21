@@ -64,14 +64,13 @@ class App extends Component {
     pages: [
       'pages/index/index',
       'pages/list/index',
-      'pages/about/index',
       'pages/add/index',
       'pages/party/index'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: '素可乐™️工具箱',
+      navigationBarTitleText: '插秧工具箱',
       navigationBarTextStyle: 'black'
     },
     tabBar: {
@@ -80,17 +79,12 @@ class App extends Component {
       backgroundColor: '#FBFBFB',
       borderStyle: 'white',
       list: [{
-        pagePath: 'pages/index/index',
-        text: '素可乐™️',
-        iconPath: './assets/images/scan-circle-outline.png',
-        selectedIconPath: './assets/images/scan-circle.png'
-      },{
         "pagePath": "pages/list/index",
         "text": "插秧",
         iconPath: './assets/images/cash-outline.png',
         selectedIconPath: './assets/images/cash.png'
       },{
-        "pagePath": "pages/about/index",
+        "pagePath": "pages/index/index",
         "text": "我",
         iconPath: './assets/images/person-circle-outline.png',
         selectedIconPath: './assets/images/person-circle.png'

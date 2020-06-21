@@ -54,7 +54,7 @@ export default () => {
         toast('重新登录', 'none', 1000)
         hiddenLoading()
         Taro.switchTab({
-          url: '/pages/about/index'
+          url: '/pages/index/index'
         })
       }
     }

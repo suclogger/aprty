@@ -97,7 +97,7 @@ export default class Party extends Component {
   handleClick(id, nickName) {
     Taro.showModal({
       title: '提示',
-      content: '确认要给' + nickName + '加一手吗？',
+      content: '确认要给' + nickName + '加秧苗吗？',
       success: function (res) {
         if (res.confirm) {
           db.collection('party_member').doc(id).update({
@@ -138,14 +138,15 @@ export default class Party extends Component {
   }
   
   onSubmit (event) {
-    wx.cloud.callFunction({
+    Taro.cloud.callFunction({
       name: 'settleMember',
       data: {
         partyId: this.state.partyId,
         own: this.state.own
       }
-    }).then((res)=> {
-      const profit = res.result;
+    }).then(res=> {
+      console.log(res)
+      const {profit} = res.result;
       const newPartyMembers = this.state.partyMembers.map(item => {
         if (item.openid === this.state.openid) {
           item.profit = profit,
@@ -156,7 +157,7 @@ export default class Party extends Component {
       this.setState({
         partyMembers: newPartyMembers
       })
-      toast('结算成功', 'none', 1000)
+      toast('汇总成功', 'none', 1000)
     })
   }
 
@@ -170,32 +171,39 @@ export default class Party extends Component {
     }).then((res)=> {
       const {diff, incompletes} = res.result;
       if(diff!=0) {
-        toast('结算失败，差额：' + diff, 'none', 1000)
+        toast('汇总失败，差额：' + diff, 'none', 2000)
       } else if (incompletes) {
-        toast('结算失败，下列用户未结算：' + incompletes, 'none', 1000)
+        toast('汇总失败，下列用户未汇总：' + incompletes, 'none', 2000)
       } else {
-        toast('结算完成！', 'none', 1000)
-      }   
+        let newParty = this.state.party
+        newParty.complete = true
+        this.setState({
+          party: newParty
+        })
+        toast('汇总完成！', 'none', 1000)
+      }
     })
   }
 
   render() {
     const { partyMembers,openid,party } = this.state
+    const memberComplete = !(partyMembers.some(member =>member.openid=openid && !member.complete));
     return (
       <View>
         <AtDivider/>
         <View className='at-row'>
             <View className='at-col at-col__offset-1' >
-              <AtBadge value={partyMembers.reduce((acc, { complete }) => complete ? 0 : 1, 0)}>
+              <AtBadge value={partyMembers.reduce((acc, { complete }) => acc+ (complete ? 0 : 1), 0)}>
                 <AtButton size='small'>人数</AtButton>
               </AtBadge>
             </View>
             <View className='at-col  at-col__offset-1'>
-              <AtBadge maxValue={9999} value={partyMembers.reduce((acc, { amount }) => acc + amount, 0)}>
-                <AtButton size='small'>总水</AtButton>
+              <AtBadge maxValue={9999} value={partyMembers.reduce((acc, { profit }) => acc + (profit < 0 ? -profit : 0), 0)}>
+                <AtButton size='small'>总秧</AtButton>
               </AtBadge>
             </View>
-            <View className='at-col  at-col__offset-1'></View>
+            <View className='at-col  at-col__offset-1'>
+            </View>
           </View>
         <AtDivider/>
         <View className="list-apge">
@@ -209,10 +217,10 @@ export default class Party extends Component {
                   title={item.nickName}
                   disabled={item.complete}
                   arrow='up'
-                  note={'总手：'+item.amount.toString() + ' ｜ 结算：' + item.profit.toString()}
+                  note={'总秧苗：'+item.amount + ' ｜ 结余：' + item.profit}
                   thumb={item.avatarUrl}
                   onClick = {this.handleClick.bind(this, item._id, item.nickName)}
-                  extraText='加一手 👋'
+                  extraText='加👋秧苗 '
                   />
                 )
               })
@@ -224,21 +232,22 @@ export default class Party extends Component {
         >
           <AtInput 
             name='own' 
-            title='结算余额' 
+            title='持有秧苗' 
             type='digit' 
             value={this.state.own} 
             onChange={this.handleChange.bind(this)} 
+            disabled={memberComplete}
           />
           <AtButton size='normal' formType='submit' 
           type='primary' 
-          disabled={!partyMembers.some(member =>member.openid=openid && !member.complete)}
-          >我要结算</AtButton>
+          disabled={memberComplete}
+          >我要汇总</AtButton>
           
         </AtForm>
         <View style={ party.openid==openid ? {} : {display: 'none'}}>
             <AtInput 
               name='commissionRate' 
-              title='抽水 (单位%)' 
+              title='公共 (单位%)' 
               type='digit' 
               value={this.state.commissionRate} 
               onChange={this.handleCommissionRateChange.bind(this)} 
@@ -247,7 +256,7 @@ export default class Party extends Component {
             onClick = {this.onSettleParty.bind(this)}
             type='primary' 
             disabled={party.complete}
-            >整局结算</AtButton>
+            >全部汇总</AtButton>
           </View>
 
         

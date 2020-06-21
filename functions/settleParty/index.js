@@ -8,59 +8,53 @@ const db= cloud.database()
 exports.main = async (event, context) => {
   const {partyId,commissionRate} = event;
   const wxContext = cloud.getWXContext()
-  return new Promise((resolve, reject) => {
-    db.collection('party').where({
-      _id: partyId,
-      complete: false
-    }).get().then(res => {
-      const { data } = res
-      if(data.length > 0) {
-        const party = data[0]
-        if(party.openid == wxContext.OPENID) {
-          db.collection('party_member').where({
-            partyId: partyId
-          }).get().then(res => {
-            const { data } = res
-            if(!data.some(d => !d.complete)) {
-              let diff = data.reduce((acc, { profit }) => acc + profit, 0)
-              // 结算成功，抽水
-              if(diff ==0 ) {
-                data.filter(member => member.profit > 0).map(member => {
-                  db.collection('party_member').doc(member._id).update({
-                    data: {
-                      profit: member.profit * (100-commissionRate)/100,
-                      commission: member.profit * commissionRate/100
-                    }
-                  }).then(res => {
-                    resolve({
-                      diff: 0
-                    })
-                  })
-                })
-                db.collection('party').doc(partyId).update({
-                  data: {
-                    complete: true,
-                    commissionRate: commissionRate
-                  }
-                })
-              } else {
-                resolve({
-                  diff: diff
-                })
+  let { data } = await db.collection('party').where({
+    _id: partyId,
+    complete: false
+  }).get()
+  if(data.length > 0) {
+    const party = data[0]
+    if(party.openid == wxContext.OPENID) {
+      let members = await db.collection('party_member').where({
+        partyId: partyId
+      }).get()
+      if(!members.data.some(d => !d.complete)) {
+        let diff = members.data.reduce((acc, { profit }) => acc + profit, 0)
+        // 结算成功，抽水
+        if(diff ==0 ) {
+          let winners = members.data.filter(member => member.profit > 0)
+          for(const idx in winners){
+            let winner = winners[idx]
+            const rate = commissionRate ? commissionRate/100 : 0
+            const cut = Math.round(winner.profit*rate)
+            await db.collection('party_member').doc(winner._id).update({
+              data: {
+                profit: db.command.inc(-cut),
+                commission: db.command.inc(cut)
               }
-            } else {
-              let incompletes = data.reduce((acc, { nickname }) => acc + nickname, '')
-              resolve({
-                incompletes: incompletes
-              })
+            })
+          }
+          await db.collection('party').doc(partyId).update({
+            data: {
+              complete: true,
+              commissionRate: commissionRate
             }
-            
-          });
+          })
+          return {
+            diff: 0
+          }
+        } else {
+          return {
+            diff: diff
+          }
         }
       } else {
-        reject()
+        let incompletes = data.reduce((acc, { nickname }) => acc + nickname, '')
+        return({
+          incompletes: incompletes
+        })
       }
-      
     }
-    )});
+  }
+
 }
