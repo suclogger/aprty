@@ -54,7 +54,7 @@
     "wx-server-sdk": "^2.1.2"
   },
   "devDependencies": {
-    "@tarojs/mini-runner": "^2.2.9",
+    "@tarojs/mini-runner": "2.2.7",
     "@tarojs/webpack-runner": "2.2.7",
     "@types/react": "^16.4.6",
     "@types/webpack-env": "^1.13.6",

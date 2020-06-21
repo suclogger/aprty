@@ -26,7 +26,7 @@ interface IProps {
 
 @inject('appStore')
 @observer
-export default class About extends Component<IProps> {
+export default class Index extends Component<IProps> {
 
   componentWillMount() {
     let data

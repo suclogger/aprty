@@ -27,7 +27,8 @@ exports.main = async (event, context) => {
         }
       })
       return {
-        profit
+        profit: profit,
+        openid: OPENID
       }
     }
     } catch (err) {

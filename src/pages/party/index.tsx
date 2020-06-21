@@ -4,7 +4,6 @@ import { AtList, AtListItem, AtButton, AtBadge,AtDivider,AtForm,AtInput } from '
 import { toast} from './../../utils/modal'
 import './index.scss'
 
-
 const db = wx.cloud.database()
 
 export default class Party extends Component {
@@ -15,7 +14,8 @@ export default class Party extends Component {
       party: {},
       openid: '',
       own: 0,
-      commissionRate: 0
+      commissionRate: 0,
+      selfMember: {}
     }
   }
 
@@ -52,16 +52,17 @@ export default class Party extends Component {
             ...userInfoObject  
           })
           this.setState({
-            partyMembers: [...data]
+            partyMembers: [...data],
+            selfMember: data.filter(member => (member.openid==this.state.openid))[0]
           })
           Taro.hideLoading()
           toast('加入成功', 'none', 1000)
         }).catch(console.log)
       } else {
         Taro.hideLoading()
-        toast('欢迎回来', 'none', 1000)
         this.setState({
-          partyMembers: [...data]
+          partyMembers: [...data],
+          selfMember: data.filter(member => (member.openid==this.state.openid))[0]
         })
       }
     }).catch(err => {
@@ -145,7 +146,6 @@ export default class Party extends Component {
         own: this.state.own
       }
     }).then(res=> {
-      console.log(res)
       const {profit} = res.result;
       const newPartyMembers = this.state.partyMembers.map(item => {
         if (item.openid === this.state.openid) {
@@ -155,9 +155,9 @@ export default class Party extends Component {
         return item
       })
       this.setState({
-        partyMembers: newPartyMembers
+        partyMembers: newPartyMembers,
+        selfMember: newPartyMembers.filter(member => (member.openid==this.state.openid))[0]
       })
-      toast('汇总成功', 'none', 1000)
     })
   }
 
@@ -181,13 +181,16 @@ export default class Party extends Component {
           party: newParty
         })
         toast('汇总完成！', 'none', 1000)
+        this.fetchPartyMembers()
       }
     })
   }
 
   render() {
-    const { partyMembers,openid,party } = this.state
-    const memberComplete = !(partyMembers.some(member =>member.openid=openid && !member.complete));
+    const { partyMembers } = this.state
+    const { openid } = this.state
+    const { party } = this.state
+    const { selfMember } = this.state
     return (
       <View>
         <AtDivider/>
@@ -236,11 +239,11 @@ export default class Party extends Component {
             type='digit' 
             value={this.state.own} 
             onChange={this.handleChange.bind(this)} 
-            disabled={memberComplete}
+            disabled={selfMember.complete}
           />
           <AtButton size='normal' formType='submit' 
           type='primary' 
-          disabled={memberComplete}
+          disabled={selfMember.complete}
           >我要汇总</AtButton>
           
         </AtForm>

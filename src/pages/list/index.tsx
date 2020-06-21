@@ -1,11 +1,7 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro, { Component, useState, useEffect } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtList, AtListItem, AtLoadMore } from 'taro-ui'
-import { loading, hiddenLoading, toast } from './../../utils/modal'
-
-
-
-
+import { toast } from './../../utils/modal'
 import './index.scss'
 
 const db = wx.cloud.database()
@@ -20,9 +16,11 @@ export default class PartyListView extends Component {
   }
 
   fetchPartyList = () => {
-    loading('加载中')
+    Taro.showLoading({
+      title: '加载中',
+    })
     db.collection('party').skip(this.state.curIdx).limit(20).get().then(res => {
-      hiddenLoading()
+      Taro.hideLoading()
       const { data } = res
       let newList = this.state.partyList
       newList.push.apply(newList, data)
@@ -45,12 +43,16 @@ export default class PartyListView extends Component {
   loadMore = () => {
     const ci = this.state.curIdx
     this.setState({
-      curIdx : ci+1
+      curIdx : ci+10
     })
     this.fetchPartyList()
   }
 
-  return () {
+  componentDidMount() {
+    this.fetchPartyList()
+  }
+
+  render () {
     const { partyList } = this.state
 
     return (<View className="list-apge">
