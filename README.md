@@ -1,6 +1,7 @@
 # wx-helper
 
-基于 `Taro + 微信云` 实现的线下活动管理微信小程序
+简单的活动管理小程序。
+基于[Taro](https://taro.aotu.io/) 和 [Taro-UI](https://taro-ui.jd.com/) 
 
 ## 主要功能
 
