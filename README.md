@@ -1,12 +1,18 @@
 # aprty 
 
-aprty = 'party'.split('').sort().join('')
+**aprty = 'party'.split('').sort().join('')**
 
-Aprty is a miniprogram aims at organizing your party game.
-简单的活动管理小程序。
 
-Build up taro & taro-ui.
+Aprty是简单的活动管理小程序。
+
+>Aprty is a miniprogram aims at organizing your party game.
+
+
+
 基于[Taro](https://taro.aotu.io/) 和 [Taro-UI](https://taro-ui.jd.com/) 
+
+> Build up taro & taro-ui.
+
 
 ## 主要功能
 
