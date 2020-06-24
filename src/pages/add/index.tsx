@@ -36,9 +36,8 @@ export default () => {
           success: (res) => {
             toast('添加成功', 'none', 1000)
             hiddenLoading()
-            const {_id} = res
-            Taro.navigateTo({
-              url: '/pages/party/index?id=' + _id
+            Taro.switchTab({
+              url: '/pages/list/index'
             })
           },
           fail: (e) => {
