@@ -1,37 +1,60 @@
 import Taro, { Component} from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Image } from "@tarojs/components";
+
 import { AtList, AtListItem, AtLoadMore } from 'taro-ui'
+import ListView from "taro-listview";
 import { toast } from './../../utils/modal'
 import './index.scss'
 
 const db = Taro.cloud.database()
 
+let curIdx = 0;
+
 export default class PartyListView extends Component {
   constructor(){
     super()
     this.state = {
+      isLoaded: false,
+      error: false,
+      hasMore: true,
+      isEmpty: false,
       partyList: [],
-      curIdx: 0
     }
   }
 
-  fetchPartyList = () => {
+  pullDownRefresh = async () => {
+    curIdx = 0
+    const res = await this.fetchPartyList();
+    this.setState(res);
+  }
+
+  onScrollToLower = async fn => {
+    const { partyList } = this.state;
+    const { partyList: newList, hasMore } = await this.fetchPartyList();
+    this.setState({
+        partyList: partyList.concat(newList),
+        hasMore
+    });
+    fn();
+  }
+
+  fetchPartyList = async () => {
+    if (curIdx === 0) this.setState({ isLoaded: false });
     Taro.showLoading({
       title: '加载中',
     })
-    db.collection('party').skip(this.state.curIdx).limit(20).get().then(res => {
-      Taro.hideLoading()
-      const { data } = res
-      let newList = this.state.partyList
-      newList.push.apply(newList, data)
-      this.setState(
-        {
-          partyList: newList
-        }
-      )
-    }).catch(() => {
+    const { data } = await db.collection('party').skip(curIdx).limit(20).orderBy('date', 'desc').get().catch(() => {
       toast('出了点问题', 'none', 1000)
     })
+
+    curIdx += data.length
+
+    const {  total } = await db.collection('party').count().catch(() => {
+      toast('出了点问题', 'none', 1000)
+    })
+
+    Taro.hideLoading()
+    return { partyList: data, hasMore: total>curIdx, isLoaded: curIdx === 0 }
   }
 
   joinParty  = (partyId) => {
@@ -40,47 +63,51 @@ export default class PartyListView extends Component {
     })
   }
 
-  loadMore = () => {
-    const ci = this.state.curIdx
-    this.setState({
-      curIdx : ci+10
-    })
-    this.fetchPartyList()
-  }
+  refList = {};
+
+  insRef = node => {
+      this.refList = node;
+  };
 
   componentDidMount() {
-    this.fetchPartyList()
+    this.refList.fetchInit();
   }
 
   render () {
-    const { partyList } = this.state
-
-    return (<View className="list-apge">
-      
-      <View className="list-body">
-        <AtList>
+    const { isLoaded, error, hasMore, isEmpty, partyList } = this.state;
+        return (
+            <View className="skeleton lazy-view">
+                <ListView
+                    autoHeight
+                    ref={node => this.insRef(node)}
+                    isLoaded={isLoaded}
+                    isError={error}
+                    hasMore={hasMore}
+                    isEmpty={isEmpty}
+                    style={{ height: '100vh' }}
+                    onPullDownRefresh={this.pullDownRefresh}
+                    onScrollToLower={fn => this.onScrollToLower(fn)}
+                >
           {
-            partyList.map(item => {
+            partyList.map((item,index) => {
               return (
-                <AtListItem
-                key={item._id}
-                title={item.name}
-                arrow='right'
-                note={item.date.toLocaleString()}
-                thumb={item.sponsorAvatarUrl}
-                disabled={item.complete}
-                onClick = {() => {this.joinParty(item._id)}}
-                />
+                
+                <View className="item skeleton-bg" >
+                   <AtListItem
+                        key={item._id}
+                        title={item.name}
+                        arrow='right'
+                        note={item.date.toLocaleString()}
+                        thumb={item.sponsorAvatarUrl}
+                        disabled={item.complete}
+                        onClick = {() => {this.joinParty(item._id)}}
+                        />
+                    </View>
               )
             })
           }
-        </AtList>
-        <AtLoadMore
-          onClick={this.loadMore}
-          status='more'
-        />
-      </View>
-    </View>
+        </ListView>
+            </View>
     )
   }
 

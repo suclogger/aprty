@@ -1,18 +1,15 @@
 import Taro, { useState } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { AtNavBar, AtForm, AtInput, AtButton } from 'taro-ui'
+import { AtForm, AtInput, AtButton } from 'taro-ui'
 import { toast, loading, hiddenLoading } from './../../utils/modal'
 import './index.scss'
+
+const db = Taro.cloud.database()
 
 export default () => {
   const [text, setName] = useState('')
   const [desc, setDesc] = useState('')
   // const [unit, setUnit] = useState('300')
-
-
-  const goBack = () => {
-    Taro.navigateBack({delta: 1})
-  }
 
   const addToDo = () => {
     if (!text.trim() ) {
@@ -20,7 +17,6 @@ export default () => {
     } else {
       loading('添加中...')
       const userInfo = Taro.getStorageSync('userInfo') || '{}'
-      console.log(userInfo);
       const userInfoObject = JSON.parse(userInfo);
       const _openid = userInfoObject.openid
       if (_openid) {
@@ -33,16 +29,16 @@ export default () => {
           'sponsorAvatarUrl': userInfoObject.avatarUrl,
           'complete': false,
           'date': new Date()}
-        const db = wx.cloud.database()
         db.collection('party').add({
           data: {
             ...addItem
           },
-          success: () => {
+          success: (res) => {
             toast('添加成功', 'none', 1000)
             hiddenLoading()
-            Taro.switchTab({
-              url: '/pages/list/index'
+            const {_id} = res
+            Taro.navigateTo({
+              url: '/pages/party/index?id=' + _id
             })
           },
           fail: (e) => {
@@ -61,12 +57,6 @@ export default () => {
 
   return (
     <View className="add-page">
-      <AtNavBar
-        onClickLeftIcon={goBack}
-        leftText='返回'
-        fixed
-        leftIconType="chevron-left"
-      />
       <View className="body">
         <AtForm>
           {/* <Panel title="TODO ITEM" /> */}

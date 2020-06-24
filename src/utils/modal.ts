@@ -1,3 +1,5 @@
+import Taro from '@tarojs/taro'
+
 export const loading = (text: string) => {
   Taro.showLoading({
     title: text

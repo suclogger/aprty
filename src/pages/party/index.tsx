@@ -79,6 +79,12 @@ export default class Party extends Component {
     })
   }
 
+  componentDidShow() {
+    Taro.showShareMenu({
+      withShareTicket: true
+    })
+  }
+
   componentDidMount() {
     const partyId = this.$router.params.id
     const userInfo = Taro.getStorageSync('userInfo') || '{}'
