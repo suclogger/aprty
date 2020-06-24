@@ -40,9 +40,6 @@ export default class PartyListView extends Component {
 
   fetchPartyList = async () => {
     if (curIdx === 0) this.setState({ isLoaded: false });
-    Taro.showLoading({
-      title: '加载中',
-    })
     const { data } = await db.collection('party').skip(curIdx).limit(20).orderBy('date', 'desc').get().catch(() => {
       toast('出了点问题', 'none', 1000)
     })
@@ -53,7 +50,6 @@ export default class PartyListView extends Component {
       toast('出了点问题', 'none', 1000)
     })
 
-    Taro.hideLoading()
     return { partyList: data, hasMore: total>curIdx, isLoaded: curIdx === 0 }
   }
 

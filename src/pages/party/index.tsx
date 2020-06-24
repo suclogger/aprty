@@ -13,8 +13,8 @@ export default class Party extends Component {
       partyMembers: [],
       party: {},
       openid: '',
-      own: 0,
-      commissionRate: 0,
+      // own: 0,
+      // commissionRate: 0,
       selfMember: {}
     }
   }
@@ -145,6 +145,9 @@ export default class Party extends Component {
   }
   
   onSubmit (event) {
+    if(!this.state.own) {
+      toast('输入秧苗才能汇总', 'none', 1000)
+    }
     Taro.cloud.callFunction({
       name: 'settleMember',
       data: {
@@ -168,6 +171,9 @@ export default class Party extends Component {
   }
 
   onSettleParty (event) {
+    if(!this.state.commissionRate) {
+      toast('输入公共比率才能全局汇总', 'none', 1000)
+    }
     Taro.cloud.callFunction({
       name: 'settleParty',
       data: {
@@ -240,10 +246,12 @@ export default class Party extends Component {
           onSubmit={this.onSubmit.bind(this)}
         >
           <AtInput 
+            required
             name='own' 
             title='持有秧苗' 
             type='digit' 
             value={this.state.own} 
+            placeholder='输入现持有的秧苗数' 
             onChange={this.handleChange.bind(this)} 
             disabled={selfMember.complete}
           />
@@ -255,10 +263,12 @@ export default class Party extends Component {
         </AtForm>
         <View style={ party.openid==openid ? {} : {display: 'none'}}>
             <AtInput 
+              required
               name='commissionRate' 
               title='公共 (单位%)' 
               type='digit' 
               value={this.state.commissionRate} 
+              placeholder='放入公共池塘的比率' 
               onChange={this.handleCommissionRateChange.bind(this)} 
             />
             <AtButton size='normal' 
